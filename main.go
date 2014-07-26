@@ -18,32 +18,11 @@ var notifications []Notification
 var index = make(map[string] []Notification)
 
 //-----------------------------------------------------------------------------
-// Обработка основного запроса
-func handleGet (response_writer http.ResponseWriter, r *http.Request) {
-    values := r.URL.Query()
-
-    buf, ok := values["user"]
-    if (!ok) {
-        fmt.Fprintf (response_writer, "User wasn't presented in request")
-        return
-    }
-    user := buf[0]
-
-    buf_list, ok := index[user]
-    if (!ok) {
-        fmt.Fprintf (response_writer, "User %s not registered", user)
-        return
-    }
-
-    for i:= range buf_list {
-        notification := buf_list[i]
-        fmt.Fprintf (response_writer, "%s|%d|%s\n", notification.date_time.Format(time_format), notification.level , notification.message)
-    }
-    index[user] = make([]Notification,0)
-}
-
-//-----------------------------------------------------------------------------
 func main() {
+    if !readConfiguration("pushme-server.conf") {
+        return
+    }
+
     fmt.Printf ("Pushme server is running\n")
 
     index["aleus"] = make([]Notification,0)
@@ -54,7 +33,12 @@ func main() {
     http.HandleFunc("/add/", handleAdd)
     http.HandleFunc("/register/", handleRegister)
 
-    log.Fatal (http.ListenAndServe("192.168.1.143:7000", nil))
+    server_address, ok := configuration["server_address"]
+    if (!ok) {
+        log.Fatal ("No variable \"server_address\" in configuration")
+    } else {
+        log.Fatal (http.ListenAndServe(server_address, nil))
+    }
 }
 
 
@@ -66,11 +50,11 @@ func handleAdd (response_writer http.ResponseWriter, r *http.Request) {
     values := r.URL.Query()
 
     buf, ok := values["user"]
-    if (!ok) {
-        fmt.Fprintf (response_writer, "User wasn't presented in request")
-        return
-    }
-    admin_user := buf[0]
+    //if (!ok) {
+    //    fmt.Fprintf (response_writer, "User wasn't presented in request")
+    //    return
+    //}
+    //admin_user := buf[0]
 
     buf, ok = values["level"]
     if (!ok) {
@@ -88,7 +72,7 @@ func handleAdd (response_writer http.ResponseWriter, r *http.Request) {
     notification.date_time = time.Now()
 
     fmt.Fprintf (response_writer, "URL: %s\n", r.URL.Path)
-    fmt.Fprintf (response_writer, "admin_user: %s\n", admin_user)
+    //fmt.Fprintf (response_writer, "admin_user: %s\n", admin_user)
     fmt.Fprintf (response_writer, "level: %d\n", notification.level)
     fmt.Fprintf (response_writer, "message: %s\n", notification.message)
     fmt.Fprintf (response_writer, "time: %s\n", notification.date_time.Format(time_format))
@@ -112,5 +96,30 @@ func handleRegister (response_writer http.ResponseWriter, r *http.Request) {
     user := buf[0]
 
     fmt.Println("New user", user)
+    index[user] = make([]Notification,0)
+}
+
+//-----------------------------------------------------------------------------
+// Обработка основного запроса
+func handleGet (response_writer http.ResponseWriter, r *http.Request) {
+    values := r.URL.Query()
+
+    buf, ok := values["user"]
+    if (!ok) {
+        fmt.Fprintf (response_writer, "User wasn't presented in request")
+        return
+    }
+    user := buf[0]
+
+    buf_list, ok := index[user]
+    if (!ok) {
+        fmt.Fprintf (response_writer, "User %s not registered", user)
+        return
+    }
+
+    for i:= range buf_list {
+        notification := buf_list[i]
+        fmt.Fprintf (response_writer, "%s|%d|%s\n", notification.date_time.Format(time_format), notification.level , notification.message)
+    }
     index[user] = make([]Notification,0)
 }
