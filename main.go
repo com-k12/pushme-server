@@ -38,12 +38,9 @@ func handleGet (response_writer http.ResponseWriter, r *http.Request) {
 
     for i:= range buf_list {
         notification := buf_list[i]
-        fmt.Fprintf (response_writer, "%s|%d|%s", notification.date_time.Format(time_format), notification.level , notification.message)
+        fmt.Fprintf (response_writer, "%s|%d|%s\n", notification.date_time.Format(time_format), notification.level , notification.message)
     }
-    buf_list = make([]Notification,0)
-    //fmt.Fprintf (response_writer, "level: %s\n", level)
-    //fmt.Fprintf (response_writer, "message: %s\n", message)
-    //fmt.Fprintf (response_writer, "time: %s\n", time.Now().Format(time_format))
+    index[user] = make([]Notification,0)
 }
 
 //-----------------------------------------------------------------------------
