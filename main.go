@@ -16,7 +16,7 @@ type Notification struct {
 }
 
 var notifications []Notification
-var index map[string] []Notification
+var index = make(map[string] []Notification)
 
 //-----------------------------------------------------------------------------
 // Обработка основного запроса
@@ -29,7 +29,6 @@ func handleGet (response_writer http.ResponseWriter, r *http.Request) {
         return
     }
     user := buf[0]
-    fmt.Fprintf (response_writer, "user: %s\n", user)
 
     buf_list, ok := index[user]
     if (!ok) {
@@ -94,10 +93,13 @@ func handleAdd (response_writer http.ResponseWriter, r *http.Request) {
     fmt.Fprintf (response_writer, "time: %s\n", notification.date_time.Format(time_format))
 
     notifications = append (notifications, notification)
-    buf_list,ok := index[user]
+    _,ok = index[user]
     if (!ok) {
-        buf_list = make([]Notification, 0)
-        index[user] = buf_list
+        fmt.Println("New user")
+        index[user] = make([]Notification,0)
+        index[user] = append(index[user], notification)
+    } else {
+        fmt.Println("Yes user")
+        index[user] = append(index[user], notification)
     }
-    buf_list = append(buf_list, notification)
 }
