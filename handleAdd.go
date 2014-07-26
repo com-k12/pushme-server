@@ -21,14 +21,14 @@ func handleAdd (response_writer http.ResponseWriter, r *http.Request) {
 
     buf, ok = values["level"]
     if (!ok) {
-        fmt.Fprintf (response_writer, "Level wasn't presented in request")
+        fmt.Fprintf (response_writer, "#error|03|Level wasn't presented in request")
         return
     }
     notification.level,_ = strconv.Atoi(buf[0])
 
     buf, ok = values["message"]
     if (!ok) {
-        fmt.Fprintf (response_writer, "Message wasn't presented in request")
+        fmt.Fprintf (response_writer, "#error|04|Message wasn't presented in request")
         return
     }
     notification.message = buf[0]

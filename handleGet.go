@@ -10,14 +10,14 @@ func handleGet (response_writer http.ResponseWriter, r *http.Request) {
 
     buf, ok := values["user"]
     if (!ok) {
-        fmt.Fprintf (response_writer, "User wasn't presented in request")
+        fmt.Fprintf (response_writer, "#error|01|User wasn't presented in request")
         return
     }
     user := buf[0]
 
     buf_list, ok := index[user]
     if (!ok) {
-        fmt.Fprintf (response_writer, "User %s not registered", user)
+        fmt.Fprintf (response_writer, "#error|02|User %s not registered", user)
         return
     }
 
