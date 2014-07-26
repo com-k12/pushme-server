@@ -16,6 +16,6 @@ func handleRegister (response_writer http.ResponseWriter, r *http.Request) {
     user := buf[0]
 
     fmt.Println("New user", user)
-    index[user] = make([]Notification,0)
+    index[user] = make([]Notification, 0)
 }
 

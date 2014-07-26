@@ -24,9 +24,7 @@ func main() {
 
     fmt.Printf ("Pushme server is running\n")
 
-    index["aleus"] = make([]Notification,0)
-    index["nezloi"] = make([]Notification,0)
-    index["sdimanx"] = make([]Notification,0)
+    readUserConfiguration ()
 
     http.HandleFunc("/", handleGet)
     http.HandleFunc("/add/", handleAdd)
