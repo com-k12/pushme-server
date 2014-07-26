@@ -46,6 +46,10 @@ func handleGet (response_writer http.ResponseWriter, r *http.Request) {
 func main() {
     fmt.Printf ("Pushme server is running\n")
 
+    index["aleus"] = make([]Notification,0)
+    index["nezloi"] = make([]Notification,0)
+    index["sdimanx"] = make([]Notification,0)
+
     http.HandleFunc("/", handleGet)
     http.HandleFunc("/add/", handleAdd)
     http.HandleFunc("/register/", handleRegister)
@@ -95,6 +99,7 @@ func handleAdd (response_writer http.ResponseWriter, r *http.Request) {
     }
 }
 
+//------------------------------------------------------------------------------
 // Регистрирует пользователя в системе
 func handleRegister (response_writer http.ResponseWriter, r *http.Request) {
     values := r.URL.Query()
