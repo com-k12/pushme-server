@@ -1,7 +1,7 @@
 pushme-server
 =============
 
-Демон для отправки сообщений на мобильное приложение [https://github.com/com-k12/pushme-mobile]("Pusme-mobile").
+Демон для отправки сообщений на мобильное приложение ["Pusme-mobile"](https://github.com/com-k12/pushme-mobile).
 Команды демон получает по http-протоколу по следующему синтаксису:
 
 * _http://localhost/add/?level=0&message=all_is_ok_ - добавляет сообщение "all_is_ok" в очередь на отправку 
